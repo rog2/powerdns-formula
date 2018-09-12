@@ -1,0 +1,12 @@
+[Unit]
+Description=PowerDNS-Admin
+After=network.target
+
+[Service]
+User=pirates
+Group=pirates
+WorkingDirectory=/opt/pirates/powerdns-admin
+ExecStart=/opt/pirates/powerdns-admin/flask/bin/gunicorn --workers 2 --bind unix:/opt/pirates/powerdns-admin/powerdns-admin.sock app:app
+
+[Install]
+WantedBy=multi-user.target

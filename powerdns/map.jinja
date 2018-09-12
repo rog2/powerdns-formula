@@ -1,0 +1,95 @@
+{% set powerdns = salt['pillar.get']('powerdns', {
+    'authoritative': {
+        'pkg': 'pdns-server',
+        'config_file': '/etc/powerdns/pdns.conf',
+        'mysql_config_file': '/etc/powerdns/pdns.d/pdns.gmysql.conf',
+        'backend_mysql_pkg': 'pdns-backend-mysql',
+        'service': 'pdns',
+    },
+    'recursor': {
+        'pkg': 'pdns-recursor',
+        'config_file': '/etc/powerdns/recursor.conf',
+        'service': 'pdns-recursor',
+        'forward_zones_file': '/etc/powerdns/forward.d/zones',
+    },
+    'config': {
+         'authoritative': {
+            'daemon': 'yes',
+            'guardian': 'yes',
+            'local-port': '5300',
+            'config-dir': '/etc/powerdns',
+            'include-dir': '/etc/powerdns/pdns.d',
+            'launch': '',
+            'setgid': 'pdns',
+            'setuid': 'pdns',
+            'cache-ttl': '20',
+            'default-ttl': '3600',
+            'query-cache-ttl': '20',
+            'default-soa-name': 'ns1.pirates.local',
+            'local-address': '127.0.0.1',
+        },       
+        'recursor': {
+            'daemon': 'yes',
+            'local-address': '127.0.0.1',
+            'allow-from': '127.0.0.0/8',
+            'local-port': '53',
+            'config-dir': '/etc/powerdns',
+            'setgid': 'pdns',
+            'setuid': 'pdns',
+            'quiet': 'yes',
+            'forward-zones-file': '/etc/powerdns/forward.d/zones',
+            'forward-zones-recurse': '.=223.5.5.5',
+        },
+        'module': {
+            'web': 'no',
+            'api': 'no',
+        },
+        'web': {
+            'webserver': 'yes',
+            'webserver-address': '127.0.0.1',
+            'webserver-allow-from': '127.0.0.1,::1',
+            'webserver-port': '8081',
+        },
+        'api': {
+            'api': 'yes',
+            'api-key': 'powerdns',
+            'api-logfile': '/var/log/pdns.log',
+            'api-readonly': 'no'
+        },
+        'admin': {
+            'secret_key': 'powerdnsadmin',
+            'bind_address': '127.0.0.1',
+            'port': '9191',
+            'log_level': 'INFO' ,
+        },
+        'nginx': {
+            'server_name': '_',
+        },
+    },
+    'repo': {
+        'release': '41',
+        'keyid': '1B0C6205FD380FBB',
+    },
+    'mysql':{
+        'pdns': {
+            'root_user': 'root',
+            'root_password': '123456',
+            'host': 'localhost',
+            'port': '3306',
+            'database': 'powerdns',
+            'powerdns_user': 'powerdns',
+            'powerdns_password': '123456',
+            'dnssec': 'yes'
+        },
+        'admin': {
+            'root_user': 'root',
+            'root_password': '123456',
+            'host': 'localhost',
+            'port': '3306',
+            'database': 'powerdnsadmin',
+            'admin_user': 'powerdnsadmin',
+            'admin_password': 'powerdnsadmin',
+        },
+    },
+
+}, merge=True) %}
