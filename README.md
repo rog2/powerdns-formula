@@ -180,7 +180,7 @@ sudo salt 'aa' state.sls powerdns.mysql pillar='{"powerdns":{ "mysql": {"pdns": 
 
 ### PowerDNS-Authoritative
 
-#### 初始化数据库（Authoritative服务的数据里）
+#### 初始化数据库（Authoritative服务的数据库）
 
 **相关参数**
 
